@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 *.so
 venv/
+.venv/
 env/
 .env
 *.egg-info/
@@ -26,9 +27,10 @@ dist/
 .DS_Store
 Thumbs.db
 
-# Uploads & temp
+# Uploads, generated frames, and feedback
 uploads/
 temp/
+feedback/
 *.mp4
 *.avi
 *.mov

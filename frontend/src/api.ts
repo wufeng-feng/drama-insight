@@ -16,12 +16,18 @@ export interface MemeMoment {
   confidence: number
 }
 
+export interface ViewingAdvice {
+  verdict: 'recommended' | 'optional' | 'skip'
+  reason: string
+}
+
 export interface AnalysisResult {
   video_id: string
   duration: number
   scenes: Scene[]
   memes: MemeMoment[]
   overall_summary: string
+  viewing_advice: ViewingAdvice
   created_at: string
 }
 
@@ -36,13 +42,31 @@ export interface TaskStatus {
 export async function uploadVideo(file: File): Promise<{ task_id: string }> {
   const formData = new FormData()
   formData.append('file', file)
-  const res = await axios.post('/api/analyze', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  })
-  return res.data
+  const response = await axios.post('/api/analyze', formData)
+  return response.data
 }
 
 export async function getTaskStatus(taskId: string): Promise<TaskStatus> {
-  const res = await axios.get(`/api/analyze/${taskId}`)
-  return res.data
+  const response = await axios.get(`/api/analyze/${taskId}`)
+  return response.data
+}
+
+export async function sendFeedback(input: {
+  task_id: string
+  item_type: 'scene' | 'meme'
+  item_index: number
+  helpful: boolean
+  issue?: string
+}): Promise<void> {
+  await axios.post('/api/feedback', input)
+}
+
+export function getApiErrorMessage(error: unknown, fallback: string): string {
+  if (axios.isAxiosError(error)) {
+    const detail = error.response?.data?.detail
+    if (typeof detail === 'string' && detail.trim()) {
+      return detail
+    }
+  }
+  return fallback
 }
