@@ -29,7 +29,7 @@
 ## 前置条件
 
 - Python 3.11+
-- Node.js 20+
+- Node.js 22.13+
 - pnpm 11+（可通过 Corepack 启用）
 - FFmpeg 和 FFprobe 已加入系统 PATH
 - 一个支持图片输入的 OpenAI 兼容模型 API Key
