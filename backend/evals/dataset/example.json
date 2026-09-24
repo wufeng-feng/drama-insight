@@ -1,0 +1,64 @@
+{
+  "name": "示例：霸总短剧第3集",
+  "duration": 120,
+  "scenes": [
+    {
+      "type": "opening_hook",
+      "start_time": 0,
+      "end_time": 25,
+      "summary": "女主发现丈夫转移婚内财产",
+      "confidence": 0.9
+    },
+    {
+      "type": "conflict",
+      "start_time": 30,
+      "end_time": 60,
+      "summary": "丈夫提出离婚，让女主净身出户",
+      "confidence": 0.85
+    },
+    {
+      "type": "key_twist",
+      "start_time": 70,
+      "end_time": 90,
+      "summary": "女主接到电话，得知自己是集团唯一继承人",
+      "confidence": 0.95
+    },
+    {
+      "type": "climax",
+      "start_time": 95,
+      "end_time": 110,
+      "summary": "女主穿着高定礼服出现在前夫公司发布会",
+      "confidence": 0.9
+    },
+    {
+      "type": "cliffhanger",
+      "start_time": 110,
+      "end_time": 120,
+      "summary": "门外出现神秘男人喊出女主真名",
+      "confidence": 0.88
+    }
+  ],
+  "memes": [
+    {
+      "type": "identity_reveal",
+      "start_time": 70,
+      "end_time": 85,
+      "description": "女主隐藏身份曝光，原来是首富千金",
+      "confidence": 0.95
+    },
+    {
+      "type": "face_slap",
+      "start_time": 95,
+      "end_time": 110,
+      "description": "女主买下前夫公司，当场打脸",
+      "confidence": 0.92
+    },
+    {
+      "type": "emotional",
+      "start_time": 40,
+      "end_time": 55,
+      "description": "女主被丈夫逼离婚时含泪签字",
+      "confidence": 0.8
+    }
+  ]
+}
