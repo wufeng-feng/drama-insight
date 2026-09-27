@@ -89,7 +89,7 @@ class LLMAnalyzer:
             client_options["base_url"] = base_url
 
         self.client = AsyncOpenAI(**client_options)
-        self.model = os.getenv("LLM_MODEL", "doubao-vision-pro-32k")
+        self.model = os.getenv("LLM_MODEL", "gpt-4.1-mini")
         self.json_mode = os.getenv("LLM_JSON_MODE", "true").lower() == "true"
 
     async def analyze(self, video_duration: float, frames: List[Dict]) -> AnalysisPayload:

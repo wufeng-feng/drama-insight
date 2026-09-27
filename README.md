@@ -22,7 +22,7 @@
 | --- | --- |
 | 前端 | React 18、TypeScript、Ant Design、Vite |
 | 后端 | FastAPI、Pydantic、Uvicorn |
-| AI | OpenAI 兼容的多模态模型接口 |
+| AI | OpenAI GPT-4.1 mini 多模态接口 |
 | 视频处理 | FFmpeg、FFprobe，全片均匀抽帧 |
 | 评测 | 人工标注 JSON、一对一时间容差匹配 |
 
@@ -32,7 +32,7 @@
 - Node.js 22.13+
 - pnpm 11+（可通过 Corepack 启用）
 - FFmpeg 和 FFprobe 已加入系统 PATH
-- 一个支持图片输入的 OpenAI 兼容模型 API Key
+- OpenAI API Key（API 计费与 ChatGPT 订阅分开）
 
 先检查视频依赖：
 
@@ -56,9 +56,9 @@ Copy-Item .env.example .env
 编辑 `backend/.env`，填写：
 
 ```dotenv
-LLM_BASE_URL=https://ark.cn-beijing.volces.com/api/v3
+LLM_BASE_URL=https://api.openai.com/v1
 LLM_API_KEY=your-real-api-key
-LLM_MODEL=doubao-vision-pro-32k
+LLM_MODEL=gpt-4.1-mini
 ```
 
 启动服务：
