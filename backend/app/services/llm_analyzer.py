@@ -5,6 +5,7 @@ from typing import Dict, List
 
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
+from pydantic import ValidationError
 
 from app.models.schemas import AnalysisPayload, MemeMoment, Scene
 
@@ -66,6 +67,7 @@ SYSTEM_PROMPT = """你是专业的短剧内容分析助手。输入是一组按�
 要求：
 - 时间戳必须依据图片前提供的秒数
 - confidence 低于 0.6 的项目不要输出
+- scenes 的每一项必须有非空 summary，memes 的每一项必须有非空 description；若画面不足以描述该片段，就不要输出该项
 - start_time 和 end_time 必须位于视频时长内
 - 画面证据不足时允许 scenes 或 memes 为空数组
 """
@@ -142,7 +144,38 @@ class LLMAnalyzer:
         if not content:
             raise RuntimeError("模型返回了空结果")
 
-        payload = AnalysisPayload.model_validate(self._parse_json(content))
+        try:
+            payload = AnalysisPayload.model_validate(self._parse_json(content))
+        except ValidationError as exc:
+            invalid_fields = ", ".join(
+                ".".join(map(str, error["loc"]))
+                for error in exc.errors()[:10]
+            )
+            retry_request = {
+                **request,
+                "messages": [
+                    *request["messages"],
+                    {"role": "assistant", "content": content},
+                    {
+                        "role": "user",
+                        "content": (
+                            f"上次的 JSON 中这些字段缺失或无效：{invalid_fields}。"
+                            "请依据原始画面重新输出完整 JSON。"
+                            "每个高光片段必须有非空 description；"
+                            "无法从画面描述的片段请删除，不要编造。"
+                        ),
+                    },
+                ],
+            }
+            retry_response = await self.client.chat.completions.create(**retry_request)
+            retry_content = retry_response.choices[0].message.content
+            if not retry_content:
+                raise RuntimeError("模型重试后返回了空结果") from exc
+            try:
+                payload = AnalysisPayload.model_validate(self._parse_json(retry_content))
+            except (ValidationError, RuntimeError) as retry_exc:
+                raise RuntimeError("模型输出格式不符合要求，自动重试后仍失败，请重新分析") from retry_exc
+
         return self._normalize_timestamps(payload, video_duration)
 
     @staticmethod
