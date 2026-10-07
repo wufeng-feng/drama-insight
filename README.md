@@ -22,7 +22,7 @@
 | --- | --- |
 | 前端 | React 18、TypeScript、Ant Design、Vite |
 | 后端 | FastAPI、Pydantic、Uvicorn |
-| AI | OpenAI GPT-4.1 mini 多模态接口 |
+| AI | OpenAI 兼容的多模态接口（GPT-4.1 mini / DeepSeek Flash） |
 | 视频处理 | FFmpeg、FFprobe，全片均匀抽帧 |
 | 评测 | 人工标注 JSON、一对一时间容差匹配 |
 
@@ -32,7 +32,7 @@
 - Node.js 22.13+
 - pnpm 11+（可通过 Corepack 启用）
 - FFmpeg 和 FFprobe 已加入系统 PATH
-- OpenAI API Key（API 计费与 ChatGPT 订阅分开）
+- OpenAI 或 DeepSeek API Key（按所选模型服务商申请）
 
 先检查视频依赖：
 
@@ -60,6 +60,17 @@ LLM_BASE_URL=https://api.openai.com/v1
 LLM_API_KEY=your-real-api-key
 LLM_MODEL=gpt-4.1-mini
 ```
+
+使用 DeepSeek 时，将同一份 `.env` 中的模型配置改为：
+
+```dotenv
+LLM_BASE_URL=https://api.deepseek.com
+LLM_API_KEY=your-deepseek-api-key
+LLM_MODEL=deepseek-flash
+LLM_JSON_MODE=true
+```
+
+这里需要支持图片输入的 `deepseek-flash`，而不是仅支持文本的模型。密钥只保存在本机的 `.env`，不要提交到仓库。参见 [DeepSeek 图片输入文档](https://api-docs.deepseek.com/zh-cn/guides/vision/)。
 
 启动服务：
 

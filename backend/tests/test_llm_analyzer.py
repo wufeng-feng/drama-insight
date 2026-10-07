@@ -20,6 +20,19 @@ class LLMAnalyzerConfigTest(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "LLM_API_KEY"):
                 LLMAnalyzer()
 
+    def test_deepseek_model_and_base_url_can_be_configured(self):
+        settings = {
+            "LLM_API_KEY": "test-key",
+            "LLM_BASE_URL": "https://api.deepseek.com",
+            "LLM_MODEL": "deepseek-flash",
+        }
+        with patch.dict(os.environ, settings, clear=True):
+            with patch("app.services.llm_analyzer.AsyncOpenAI") as client:
+                analyzer = LLMAnalyzer()
+
+        self.assertEqual(analyzer.model, "deepseek-flash")
+        self.assertEqual(client.call_args.kwargs["base_url"], "https://api.deepseek.com")
+
 
 if __name__ == "__main__":
     unittest.main()

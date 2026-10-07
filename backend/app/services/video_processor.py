@@ -99,6 +99,8 @@ class VideoProcessor:
                     str(self.video_path),
                     "-frames:v",
                     "1",
+                    "-pix_fmt",
+                    "yuvj420p",
                     "-q:v",
                     "3",
                     str(frame_path),
